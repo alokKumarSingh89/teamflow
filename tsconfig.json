@@ -17,6 +17,34 @@
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictPropertyInitialization": false
-  }
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@app/auth-client": ["./libs/auth-client/src"],
+      "@app/auth-client/*": ["./libs/auth-client/src/*"],
+      "@app/config": ["./libs/config/src"],
+      "@app/config/*": ["./libs/config/src/*"],
+      "@app/events": ["./libs/events/src"],
+      "@app/events/*": ["./libs/events/src/*"],
+      "@app/logger": ["./libs/logger/src"],
+      "@app/logger/*": ["./libs/logger/src/*"]
+    }
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/user-subgraph/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/project-subgraph/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/task-subgraph/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/notification-worker/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/api-gateway/tsconfig.app.json"
+    }
+  ]
 }
