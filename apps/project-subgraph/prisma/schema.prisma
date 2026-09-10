@@ -1,0 +1,66 @@
+generator client {
+    provider            = "prisma-client"
+    output              = "../src/generated/prisma"
+    moduleFormat        = "cjs"
+    importFileExtension = "ts"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum ProjectStatus {
+    ACTIVE
+    ARCHIVED
+    COMPLETED
+}
+
+model Project {
+    id             String        @id @default(uuid()) @db.Uuid
+    organizationId String        @db.Uuid
+    name           String        @db.VarChar(160)
+    description    String?       @db.Text
+    status         ProjectStatus @default(ACTIVE)
+    ownerId        String        @db.Uuid
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    members ProjectMember[]
+    labels  Label[]
+
+    @@index([organizationId])
+    @@index([ownerId])
+    @@index([status])
+    @@map("projects")
+}
+
+model ProjectMember {
+    id        String @id @default(uuid()) @db.Uuid
+    projectId String @db.Uuid
+    userId    String @db.Uuid
+
+    createdAt DateTime @default(now())
+
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@unique([projectId, userId])
+    @@index([userId])
+    @@map("project_members")
+}
+
+model Label {
+    id        String @id @default(uuid()) @db.Uuid
+    projectId String @db.Uuid
+    name      String @db.VarChar(80)
+    color     String @db.VarChar(20)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@unique([projectId, name])
+    @@index([projectId])
+    @@map("labels")
+}
