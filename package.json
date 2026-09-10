@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build user-subgraph && nest build project-subgraph && nest build task-subgraph && nest build notification-worker",
+    "build": "nest build api-gateway && nest build user-subgraph && nest build project-subgraph && nest build task-subgraph && nest build notification-worker",
     "build:user": "nest build user-subgraph",
     "build:project": "nest build project-subgraph",
     "build:task": "nest build task-subgraph",
@@ -17,6 +17,7 @@
     "start:task": "nest start task-subgraph",
     "start:worker": "nest start notification-worker",
     "start:dev": "nest start user-subgraph --watch",
+    "start:api": "nest start api-gateway --watch",
     "start:user:dev": "nest start user-subgraph --watch",
     "start:project:dev": "nest start project-subgraph --watch",
     "start:task:dev": "nest start task-subgraph --watch",

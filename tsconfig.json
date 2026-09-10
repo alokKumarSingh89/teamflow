@@ -42,6 +42,9 @@
     },
     {
       "path": "./apps/notification-worker/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/api-gateway/tsconfig.app.json"
     }
   ]
 }
