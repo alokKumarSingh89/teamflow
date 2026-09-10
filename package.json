@@ -6,19 +6,23 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
-    "deploy": "nest deploy",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "oxlint src/ test/",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "build": "nest build user-subgraph && nest build project-subgraph && nest build task-subgraph && nest build notification-worker",
+    "build:user": "nest build user-subgraph",
+    "build:project": "nest build project-subgraph",
+    "build:task": "nest build task-subgraph",
+    "build:worker": "nest build notification-worker",
+    "start": "nest start user-subgraph",
+    "start:user": "nest start user-subgraph",
+    "start:project": "nest start project-subgraph",
+    "start:task": "nest start task-subgraph",
+    "start:worker": "nest start notification-worker",
+    "start:dev": "nest start user-subgraph --watch",
+    "start:user:dev": "nest start user-subgraph --watch",
+    "start:project:dev": "nest start project-subgraph --watch",
+    "start:task:dev": "nest start task-subgraph --watch",
+    "start:worker:dev": "nest start notification-worker --watch",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "format:check": "prettier --check \"apps/**/*.ts\" \"libs/**/*.ts\""
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
@@ -33,6 +37,7 @@
     "@nestjs/mau": "^0.2.6",
     "@nestjs/schematics": "^12.0.0",
     "@nestjs/testing": "^12.0.1",
+    "@rspack/core": "^2.2.3",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
@@ -46,6 +51,8 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^6.0.2"
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "typescript": "^6.0.2",
+    "webpack-node-externals": "^3.0.0"
   }
 }

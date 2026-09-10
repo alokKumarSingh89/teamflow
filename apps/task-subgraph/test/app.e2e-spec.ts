@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { TaskSubgraphModule } from './../src/task-subgraph.module';
 
-describe('AppController (e2e)', () => {
+describe('TaskSubgraphController (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [TaskSubgraphModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
