@@ -7,7 +7,10 @@ import { UserModule } from './users/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { UserResolver } from './users/graphql/user.resolver';
+
+import { join } from 'path';
+import { UserResolver } from './users/user.resolver';
+import { OrganizationResolver } from './organizations/organization.resolver';
 
 @Module({
   imports: [
@@ -17,11 +20,12 @@ import { UserResolver } from './users/graphql/user.resolver';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: join(__dirname, '../schema.gql'),
       sortSchema: true,
       graphiql: true,
-      context: ({ req }) => ({
+      context: ({ req, res }) => ({
         req,
+        res,
       }),
     }),
     DatabaseModule,
@@ -30,6 +34,6 @@ import { UserResolver } from './users/graphql/user.resolver';
     MembershipModule,
     TeamModule,
   ],
-  providers: [UserResolver],
+  providers: [],
 })
 export class AppModule {}

@@ -11,6 +11,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(process.env.port ?? 3000);
+  const port = Number(process.env.PORT) || 3000;
+
+  await app.listen(port);
+
+  console.log(`User subgraph running on http://localhost:${port}`);
+
+  console.log(`GraphQL IDE: http://localhost:${port}/graphql`);
 }
 bootstrap();
