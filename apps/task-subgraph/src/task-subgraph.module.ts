@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TaskSubgraphController } from './task-subgraph.controller';
-import { TaskSubgraphService } from './task-subgraph.service';
+import { DatabaseModule } from './database/database.module';
+import { TaskModule } from './tasks/task.module';
 
 @Module({
-  imports: [],
-  controllers: [TaskSubgraphController],
-  providers: [TaskSubgraphService],
+  imports: [DatabaseModule, TaskModule],
+  controllers: [],
+  providers: [],
 })
 export class TaskSubgraphModule {}
