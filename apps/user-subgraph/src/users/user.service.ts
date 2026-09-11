@@ -3,12 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { UserStatus } from '../generated/prisma/client';
 import { UserRepository } from './repositories/user.repository';
-import { UserStatus } from '../generated/prisma/enums';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
+
   async getById(id: string) {
     const user = await this.userRepository.findById(id);
 
@@ -20,7 +21,7 @@ export class UserService {
   }
 
   async getByEmail(email: string) {
-    return this.userRepository.findByEmail(email);
+    return this.userRepository.findByEmail(this.normalizeEmail(email));
   }
 
   async list(params?: {
@@ -32,15 +33,18 @@ export class UserService {
   }
 
   async create(data: { email: string; name: string }) {
-    const existingUser = await this.userRepository.findByEmail(data.email);
+    const email = this.normalizeEmail(data.email);
+
+    const existingUser = await this.userRepository.findByEmail(email);
 
     if (existingUser) {
-      throw new ConflictException(
-        `User with email ${data.email} already exists`,
-      );
+      throw new ConflictException(`User with email ${email} already exists`);
     }
 
-    return this.userRepository.create(data);
+    return this.userRepository.create({
+      email,
+      name: data.name.trim(),
+    });
   }
 
   async update(
@@ -52,6 +56,13 @@ export class UserService {
   ) {
     await this.getById(id);
 
-    return this.userRepository.update(id, data);
+    return this.userRepository.update(id, {
+      ...data,
+      name: data.name?.trim(),
+    });
+  }
+
+  private normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
   }
 }

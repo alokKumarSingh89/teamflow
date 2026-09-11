@@ -1,39 +1,30 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { User, UserStatus } from '../../generated/prisma/client';
+import { Injectable } from '@nestjs/common';
+import {
+  Organization,
+  OrganizationStatus,
+} from '../../generated/prisma/client';
 import { DatabaseService } from '../../database/database.service';
 import { PrismaTransactionClient } from '../../database/prisma-transaction';
 
 @Injectable()
-export class UserRepository {
-  constructor(
-    @Inject(DatabaseService)
-    private readonly database: DatabaseService,
-  ) {}
+export class OrganizationRepository {
+  constructor(private readonly database: DatabaseService) {}
 
   async findById(
     id: string,
     client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<User | null> {
-    return client.user.findUnique({
+  ): Promise<Organization | null> {
+    return client.organization.findUnique({
       where: { id },
     });
   }
 
-  async findByEmail(
-    email: string,
-    client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<User | null> {
-    return client.user.findUnique({
-      where: { email },
-    });
-  }
-
   async findMany(params?: {
-    status?: UserStatus;
+    status?: OrganizationStatus;
     limit?: number;
     offset?: number;
-  }): Promise<User[]> {
-    return this.database.user.findMany({
+  }): Promise<Organization[]> {
+    return this.database.organization.findMany({
       where: params?.status
         ? {
             status: params.status,
@@ -49,12 +40,11 @@ export class UserRepository {
 
   async create(
     data: {
-      email: string;
       name: string;
     },
     client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<User> {
-    return client.user.create({
+  ): Promise<Organization> {
+    return client.organization.create({
       data,
     });
   }
@@ -63,11 +53,11 @@ export class UserRepository {
     id: string,
     data: {
       name?: string;
-      status?: UserStatus;
+      status?: OrganizationStatus;
     },
     client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<User> {
-    return client.user.update({
+  ): Promise<Organization> {
+    return client.organization.update({
       where: { id },
       data,
     });
