@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { TaskSubgraphModule } from './task-subgraph.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(TaskSubgraphModule);
+  const app = await NestFactory.create(AppModule);
   await app.listen(process.env.port ?? 3002);
 }
 bootstrap();

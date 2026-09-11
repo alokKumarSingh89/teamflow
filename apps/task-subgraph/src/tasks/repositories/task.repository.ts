@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../../database/database.service';
 import { Task, TaskPriority, TaskStatus } from '../../generated/prisma/client';
+import { DatabaseService } from '../../database/database.service';
+import { PrismaTransactionClient } from '../../database/prisma-transaction';
 
 @Injectable()
 export class TaskRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  async findById(id: string): Promise<Task | null> {
-    return this.database.task.findUnique({
+  async findById(
+    id: string,
+    client: PrismaTransactionClient | DatabaseService = this.database,
+  ): Promise<Task | null> {
+    return client.task.findUnique({
       where: {
         id,
       },
@@ -37,16 +41,28 @@ export class TaskRepository {
     });
   }
 
-  async create(data: {
-    projectId: string;
-    title: string;
-    description?: string;
-    priority?: TaskPriority;
-    assigneeId?: string;
-    createdById: string;
-  }): Promise<Task> {
-    return this.database.task.create({
-      data,
+  async create(
+    data: {
+      projectId: string;
+      title: string;
+      description?: string;
+      priority?: TaskPriority;
+      assigneeId?: string;
+      createdById: string;
+      dueDate?: Date;
+    },
+    client: PrismaTransactionClient | DatabaseService = this.database,
+  ): Promise<Task> {
+    return client.task.create({
+      data: {
+        projectId: data.projectId,
+        title: data.title,
+        description: data.description,
+        priority: data.priority,
+        assigneeId: data.assigneeId,
+        createdById: data.createdById,
+        dueDate: data.dueDate,
+      },
     });
   }
 
@@ -58,9 +74,11 @@ export class TaskRepository {
       status?: TaskStatus;
       priority?: TaskPriority;
       assigneeId?: string | null;
+      dueDate?: Date | null;
     },
+    client: PrismaTransactionClient | DatabaseService = this.database,
   ): Promise<Task> {
-    return this.database.task.update({
+    return client.task.update({
       where: {
         id,
       },

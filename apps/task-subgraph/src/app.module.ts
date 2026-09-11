@@ -4,7 +4,5 @@ import { TaskModule } from './tasks/task.module';
 
 @Module({
   imports: [DatabaseModule, TaskModule],
-  controllers: [],
-  providers: [],
 })
-export class TaskSubgraphModule {}
+export class AppModule {}
