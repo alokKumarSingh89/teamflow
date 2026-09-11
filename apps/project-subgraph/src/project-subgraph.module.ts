@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ProjectSubgraphController } from './project-subgraph.controller';
-import { ProjectSubgraphService } from './project-subgraph.service';
+import { ProjectModule } from './projects/project.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [],
-  controllers: [ProjectSubgraphController],
-  providers: [ProjectSubgraphService],
+  imports: [DatabaseModule, ProjectModule],
+  controllers: [],
+  providers: [],
 })
 export class ProjectSubgraphModule {}
