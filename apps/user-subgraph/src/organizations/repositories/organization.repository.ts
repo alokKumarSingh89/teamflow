@@ -38,6 +38,14 @@ export class OrganizationRepository {
     });
   }
 
+  async findByName(name: string): Promise<Organization | null> {
+    return this.database.organization.findFirst({
+      where: {
+        name,
+      },
+    });
+  }
+
   async create(
     data: {
       name: string;
@@ -46,6 +54,29 @@ export class OrganizationRepository {
   ): Promise<Organization> {
     return client.organization.create({
       data,
+    });
+  }
+
+  async createWithOwner(data: {
+    name: string;
+    ownerId: string;
+  }): Promise<Organization> {
+    return this.database.$transaction(async (tx) => {
+      const organization = await tx.organization.create({
+        data: {
+          name: data.name,
+        },
+      });
+
+      await tx.membership.create({
+        data: {
+          userId: data.ownerId,
+          organizationId: organization.id,
+          role: 'OWNER',
+        },
+      });
+
+      return organization;
     });
   }
 

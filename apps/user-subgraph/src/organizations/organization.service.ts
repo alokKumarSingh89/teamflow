@@ -3,18 +3,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+
 import { OrganizationStatus } from '../generated/prisma/client';
-import { DatabaseService } from '../database/database.service';
-import { MembershipRole } from '../generated/prisma/client';
-import { MembershipRepository } from '../memberships/repositories/membership.repository';
+
 import { OrganizationRepository } from './repositories/organization.repository';
 
 @Injectable()
 export class OrganizationService {
   constructor(
-    private readonly database: DatabaseService,
     private readonly organizationRepository: OrganizationRepository,
-    private readonly membershipRepository: MembershipRepository,
   ) {}
 
   async getById(id: string) {
@@ -36,31 +33,13 @@ export class OrganizationService {
   }
 
   async createOrganization(data: { name: string; ownerId: string }) {
-    /**
-     * Organization creation and owner membership are one
-     * business operation.
-     *
-     * Either both records exist or neither exists.
-     */
-    return this.database.$transaction(async (tx) => {
-      const organization = await this.organizationRepository.create(
-        {
-          name: data.name,
-        },
-        tx,
-      );
+    const existing = await this.organizationRepository.findByName(data.name);
 
-      await this.membershipRepository.create(
-        {
-          userId: data.ownerId,
-          organizationId: organization.id,
-          role: MembershipRole.OWNER,
-        },
-        tx,
-      );
+    if (existing) {
+      throw new ConflictException(`Organization "${data.name}" already exists`);
+    }
 
-      return organization;
-    });
+    return this.organizationRepository.createWithOwner(data);
   }
 
   async update(
