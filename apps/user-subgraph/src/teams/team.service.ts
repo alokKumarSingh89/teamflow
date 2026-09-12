@@ -31,7 +31,9 @@ export class TeamService {
     );
 
     if (existing) {
-      throw new ConflictException(`Team "${data.name}" already exists`);
+      throw new ConflictException(
+        `Team "${data.name}" already exists in this organization`,
+      );
     }
 
     return this.teamRepository.create(data);
