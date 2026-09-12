@@ -23,7 +23,7 @@ import { OrganizationResolver } from './organizations/organization.resolver';
       autoSchemaFile: join(__dirname, '../schema.gql'),
       sortSchema: true,
       graphiql: true,
-      context: ({ req, res }) => ({
+      context: ({ req, res }: { req: any; res: any }) => ({
         req,
         res,
       }),
