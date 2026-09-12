@@ -1,11 +1,24 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { OrganizationType } from './organization.type';
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationInput } from './organization.input';
+import { TeamService } from '../teams/team.service';
+import { TeamType } from '../teams/team.type';
 
 @Resolver(() => OrganizationType)
 export class OrganizationResolver {
-  constructor(private readonly organizationService: OrganizationService) {}
+  constructor(
+    private readonly organizationService: OrganizationService,
+    private readonly teamService: TeamService,
+  ) {}
 
   @Query(() => OrganizationType)
   async organization(
@@ -29,5 +42,9 @@ export class OrganizationResolver {
       name: input.name,
       ownerId: input.ownerId,
     });
+  }
+  @ResolveField(() => [TeamType])
+  async teams(@Parent() organization: OrganizationType): Promise<TeamType[]> {
+    return this.teamService.listByOrganization(organization.id);
   }
 }
