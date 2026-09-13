@@ -1,4 +1,11 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveReference,
+} from '@nestjs/graphql';
 
 import { TaskService } from './task.service';
 
@@ -65,5 +72,13 @@ export class TaskResolver {
       assigneeId: input.assigneeId,
       dueDate: input.dueDate,
     });
+  }
+
+  @ResolveReference()
+  async resolveReference(reference: {
+    __typename: string;
+    id: string;
+  }): Promise<TaskType> {
+    return this.taskService.getById(reference.id);
   }
 }
