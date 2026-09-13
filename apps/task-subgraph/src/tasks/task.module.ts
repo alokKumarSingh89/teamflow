@@ -9,6 +9,7 @@ import { TaskService } from './task.service';
 import { CommentService } from './comment.service';
 import { TaskActivityService } from './task-activity.service';
 import { TaskResolver } from './task.resolver';
+import { TaskUserResolver } from './task-user.resolver';
 
 @Module({
   imports: [DatabaseModule],
@@ -21,6 +22,7 @@ import { TaskResolver } from './task.resolver';
     CommentService,
     TaskActivityService,
     TaskResolver,
+    TaskUserResolver,
   ],
   exports: [TaskService, CommentService, TaskActivityService],
 })
