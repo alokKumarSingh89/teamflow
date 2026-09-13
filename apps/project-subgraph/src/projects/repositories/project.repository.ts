@@ -17,7 +17,16 @@ export class ProjectRepository {
       },
     });
   }
-
+  async findByOrganization(organizationId: string): Promise<Project[]> {
+    return this.database.project.findMany({
+      where: {
+        organizationId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
   async findMany(params?: {
     organizationId?: string;
     status?: ProjectStatus;

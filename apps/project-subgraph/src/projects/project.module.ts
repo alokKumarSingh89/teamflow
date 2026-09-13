@@ -8,6 +8,7 @@ import { LabelRepository } from './repositories/label.repository';
 import { ProjectService } from './project.service';
 import { ProjectMemberService } from './project-member.service';
 import { LabelService } from './label.service';
+import { ProjectResolver } from './project.resolver';
 
 @Module({
   imports: [DatabaseModule],
@@ -19,6 +20,7 @@ import { LabelService } from './label.service';
     ProjectService,
     ProjectMemberService,
     LabelService,
+    ProjectResolver,
   ],
   exports: [ProjectService, ProjectMemberService, LabelService],
 })
