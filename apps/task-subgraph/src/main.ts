@@ -1,8 +1,26 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.port ?? 3002);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  const port = Number(process.env.PORT) || 3002;
+
+  await app.listen(port);
+
+  console.log(`Task subgraph running on http://localhost:${port}`);
+
+  console.log(`GraphQL IDE: http://localhost:${port}/graphql`);
 }
-bootstrap();
+
+void bootstrap();

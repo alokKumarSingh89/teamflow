@@ -21,7 +21,7 @@ export class TaskActivityRepository {
   async create(
     data: {
       taskId: string;
-      actorId: string;
+      actorId?: string;
       eventType: string;
       metadata?: object;
     },
@@ -30,7 +30,7 @@ export class TaskActivityRepository {
     return client.taskActivity.create({
       data: {
         taskId: data.taskId,
-        actorId: data.actorId,
+        actorId: data.actorId ?? '',
         eventType: data.eventType,
         metadata: data.metadata,
       },

@@ -17,7 +17,16 @@ export class TaskRepository {
       },
     });
   }
-
+  async findByProject(projectId: string) {
+    return this.database.task.findMany({
+      where: {
+        projectId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
   async findMany(params?: {
     projectId?: string;
     assigneeId?: string;

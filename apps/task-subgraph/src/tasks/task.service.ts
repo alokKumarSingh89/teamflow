@@ -72,7 +72,6 @@ export class TaskService {
 
   async update(
     id: string,
-    actorId: string,
     data: {
       title?: string;
       description?: string;
@@ -98,7 +97,6 @@ export class TaskService {
       await this.activityRepository.create(
         {
           taskId: id,
-          actorId,
           eventType: 'TASK_UPDATED',
           metadata: {
             previousStatus: existing.status,
@@ -112,5 +110,8 @@ export class TaskService {
 
       return updated;
     });
+  }
+  async listByProject(projectId: string) {
+    return this.taskRepository.findByProject(projectId);
   }
 }
