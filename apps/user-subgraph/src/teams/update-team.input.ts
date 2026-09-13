@@ -9,10 +9,6 @@ import {
 } from 'class-validator';
 import { TeamStatus } from '../generated/prisma/enums';
 
-registerEnumType(TeamStatus, {
-  name: 'TeamStatus',
-});
-
 @InputType()
 export class UpdateTeamInput {
   @Field({

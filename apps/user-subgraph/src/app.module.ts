@@ -6,11 +6,11 @@ import { TeamModule } from './teams/team.module';
 import { UserModule } from './users/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
 import { join } from 'path';
-import { UserResolver } from './users/user.resolver';
-import { OrganizationResolver } from './organizations/organization.resolver';
 
 @Module({
   imports: [
@@ -18,9 +18,13 @@ import { OrganizationResolver } from './organizations/organization.resolver';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(__dirname, '../schema.gql'),
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
+
+      autoSchemaFile: {
+        federation: 2,
+        path: join(__dirname, '../schema.gql'),
+      },
       sortSchema: true,
       graphiql: true,
       context: ({ req, res }: { req: any; res: any }) => ({

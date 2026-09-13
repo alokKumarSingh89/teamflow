@@ -1,4 +1,11 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveReference,
+} from '@nestjs/graphql';
 import { UserType } from './user.type';
 import { CreateUserInput } from './user.input';
 import { UpdateUserInput } from './update-user.input';
@@ -40,5 +47,13 @@ export class UserResolver {
       name: input.name,
       status: input.status,
     });
+  }
+
+  @ResolveReference()
+  async resolveReference(reference: {
+    __typename: string;
+    id: string;
+  }): Promise<UserType> {
+    return this.userService.getById(reference.id);
   }
 }
