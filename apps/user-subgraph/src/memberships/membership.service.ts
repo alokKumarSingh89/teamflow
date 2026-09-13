@@ -3,7 +3,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+
 import { MembershipRole } from '../generated/prisma/client';
+
 import { MembershipRepository } from './repositories/membership.repository';
 
 @Injectable()
@@ -20,25 +22,18 @@ export class MembershipService {
     return membership;
   }
 
-  async getForUser(userId: string, organizationId: string) {
-    return this.membershipRepository.findByUserAndOrganization(
-      userId,
-      organizationId,
-    );
-  }
-
-  async listOrganizationMembers(organizationId: string) {
-    return this.membershipRepository.findByOrganization(organizationId);
-  }
-
-  async listUserOrganizations(userId: string) {
+  async listByUser(userId: string) {
     return this.membershipRepository.findByUser(userId);
   }
 
-  async addMember(data: {
+  async listByOrganization(organizationId: string) {
+    return this.membershipRepository.findByOrganization(organizationId);
+  }
+
+  async create(data: {
     userId: string;
     organizationId: string;
-    role?: MembershipRole;
+    role: MembershipRole;
   }) {
     const existing = await this.membershipRepository.findByUserAndOrganization(
       data.userId,
@@ -54,13 +49,13 @@ export class MembershipService {
     return this.membershipRepository.create(data);
   }
 
-  async changeRole(id: string, role: MembershipRole) {
+  async updateRole(id: string, role: MembershipRole) {
     await this.getById(id);
 
     return this.membershipRepository.updateRole(id, role);
   }
 
-  async removeMember(id: string) {
+  async remove(id: string) {
     await this.getById(id);
 
     return this.membershipRepository.delete(id);

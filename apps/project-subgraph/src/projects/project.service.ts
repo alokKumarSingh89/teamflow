@@ -16,6 +16,10 @@ export class ProjectService {
     private readonly projectMemberRepository: ProjectMemberRepository,
   ) {}
 
+  async listByOrganization(organizationId: string) {
+    return this.projectRepository.findByOrganization(organizationId);
+  }
+
   async getById(id: string) {
     const project = await this.projectRepository.findById(id);
 

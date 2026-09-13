@@ -7,12 +7,11 @@ import { PrismaTransactionClient } from '../../database/prisma-transaction';
 export class TeamRepository {
   constructor(private readonly database: DatabaseService) {}
 
-  async findById(
-    id: string,
-    client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<Team | null> {
-    return client.team.findUnique({
-      where: { id },
+  async findById(id: string): Promise<Team | null> {
+    return this.database.team.findUnique({
+      where: {
+        id,
+      },
     });
   }
 
@@ -22,7 +21,7 @@ export class TeamRepository {
         organizationId,
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
     });
   }
@@ -41,14 +40,8 @@ export class TeamRepository {
     });
   }
 
-  async create(
-    data: {
-      organizationId: string;
-      name: string;
-    },
-    client: PrismaTransactionClient | DatabaseService = this.database,
-  ): Promise<Team> {
-    return client.team.create({
+  async create(data: { organizationId: string; name: string }): Promise<Team> {
+    return this.database.team.create({
       data,
     });
   }
@@ -59,10 +52,11 @@ export class TeamRepository {
       name?: string;
       status?: TeamStatus;
     },
-    client: PrismaTransactionClient | DatabaseService = this.database,
   ): Promise<Team> {
-    return client.team.update({
-      where: { id },
+    return this.database.team.update({
+      where: {
+        id,
+      },
       data,
     });
   }
