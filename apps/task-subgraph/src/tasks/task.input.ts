@@ -2,6 +2,7 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 
 import {
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -28,10 +29,10 @@ export class CreateTaskInput {
   @IsString()
   description?: string;
 
-  @Field(() => TaskPriority, {
-    defaultValue: TaskPriority.MEDIUM,
-  })
-  priority: TaskPriority = TaskPriority.MEDIUM;
+  @Field(() => TaskPriority, { nullable: true })
+  @IsOptional()
+  @IsEnum(TaskPriority)
+  priority?: TaskPriority;
 
   @Field(() => ID, {
     nullable: true,

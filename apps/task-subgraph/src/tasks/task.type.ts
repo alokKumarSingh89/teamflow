@@ -7,6 +7,7 @@ import {
 } from '@nestjs/graphql';
 
 import { TaskPriority, TaskStatus } from '../generated/prisma/client';
+import { UserReferenceType } from '../federation/user-reference.type';
 
 registerEnumType(TaskStatus, {
   name: 'TaskStatus',
@@ -51,4 +52,10 @@ export class TaskType {
 
   @Field()
   updatedAt!: Date;
+  @Field(() => UserReferenceType, {
+    nullable: true,
+  })
+  assignee?: UserReferenceType | null;
+  @Field(() => UserReferenceType)
+  createdBy!: UserReferenceType;
 }
