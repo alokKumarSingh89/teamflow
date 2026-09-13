@@ -15,7 +15,7 @@ import { join } from 'path';
 
       autoSchemaFile: {
         federation: 2,
-        path: join(__dirname, '../schema.gql'),
+        path: join(__dirname, './schema.gql'),
       },
       sortSchema: true,
 
