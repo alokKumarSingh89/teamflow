@@ -7,15 +7,24 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { UserReferenceType } from './federation/user-reference.type';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
 
       autoSchemaFile: {
         federation: 2,
-        path: join(__dirname, '../schema.gql'),
+        path: join(__dirname, './schema.gql'),
+      },
+      buildSchemaOptions: {
+        orphanedTypes: [UserReferenceType],
       },
       sortSchema: true,
       graphiql: true,

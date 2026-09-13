@@ -7,6 +7,7 @@ import {
 } from '@nestjs/graphql';
 
 import { ProjectStatus } from '../generated/prisma/client';
+import { UserReferenceType } from '../federation/user-reference.type';
 
 registerEnumType(ProjectStatus, {
   name: 'ProjectStatus',
@@ -32,6 +33,9 @@ export class ProjectType {
 
   @Field(() => ID)
   ownerId!: string;
+
+  @Field(() => UserReferenceType)
+  owner!: UserReferenceType;
 
   @Field()
   createdAt!: Date;
