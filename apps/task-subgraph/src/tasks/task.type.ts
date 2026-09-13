@@ -1,4 +1,10 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Directive,
+  Field,
+  ID,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 import { TaskPriority, TaskStatus } from '../generated/prisma/client';
 
@@ -11,6 +17,7 @@ registerEnumType(TaskPriority, {
 });
 
 @ObjectType('Task')
+@Directive('@key(fields: "id")')
 export class TaskType {
   @Field(() => ID)
   id!: string;

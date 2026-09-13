@@ -9,6 +9,7 @@ import { ProjectService } from './project.service';
 import { ProjectMemberService } from './project-member.service';
 import { LabelService } from './label.service';
 import { ProjectResolver } from './project.resolver';
+import { ProjectOwnerResolver } from './project-owner.resolver';
 
 @Module({
   imports: [DatabaseModule],
@@ -21,6 +22,7 @@ import { ProjectResolver } from './project.resolver';
     ProjectMemberService,
     LabelService,
     ProjectResolver,
+    ProjectOwnerResolver,
   ],
   exports: [ProjectService, ProjectMemberService, LabelService],
 })

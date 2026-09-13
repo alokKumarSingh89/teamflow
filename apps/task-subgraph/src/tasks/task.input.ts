@@ -9,17 +9,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-import { TaskPriority, TaskStatus } from '../generated/prisma/client';
-
-import { registerEnumType } from '@nestjs/graphql';
-
-registerEnumType(TaskStatus, {
-  name: 'TaskStatus',
-});
-
-registerEnumType(TaskPriority, {
-  name: 'TaskPriority',
-});
+import { TaskPriority } from '../generated/prisma/client';
 
 @InputType()
 export class CreateTaskInput {

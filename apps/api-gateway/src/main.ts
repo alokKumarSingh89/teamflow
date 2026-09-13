@@ -1,8 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { ApiGatewayModule } from './api-gateway.module';
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiGatewayModule);
-  await app.listen(process.env.port ?? 3000);
+  const app = await NestFactory.create(AppModule);
+
+  const port = Number(process.env.PORT) || 3000;
+
+  await app.listen(port);
+
+  console.log(`API Gateway running on http://localhost:${port}`);
+
+  console.log(`GraphQL Gateway: http://localhost:${port}/graphql`);
 }
-bootstrap();
+
+void bootstrap();

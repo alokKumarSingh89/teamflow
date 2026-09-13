@@ -12,16 +12,6 @@ import {
 
 import { TaskPriority, TaskStatus } from '../generated/prisma/client';
 
-import { registerEnumType } from '@nestjs/graphql';
-
-registerEnumType(TaskStatus, {
-  name: 'TaskStatus',
-});
-
-registerEnumType(TaskPriority, {
-  name: 'TaskPriority',
-});
-
 @InputType()
 export class UpdateTaskInput {
   @Field({

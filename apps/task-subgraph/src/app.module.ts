@@ -2,16 +2,21 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { TaskModule } from './tasks/task.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
 import { join } from 'path';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
 
-      autoSchemaFile: join(__dirname, '../schema.gql'),
-
+      autoSchemaFile: {
+        federation: 2,
+        path: join(__dirname, './schema.gql'),
+      },
       sortSchema: true,
 
       graphiql: true,

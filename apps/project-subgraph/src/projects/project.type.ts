@@ -1,12 +1,20 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Directive,
+  Field,
+  ID,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 import { ProjectStatus } from '../generated/prisma/client';
+import { UserReferenceType } from '../federation/user-reference.type';
 
 registerEnumType(ProjectStatus, {
   name: 'ProjectStatus',
 });
 
 @ObjectType('Project')
+@Directive('@key(fields: "id")')
 export class ProjectType {
   @Field(() => ID)
   id!: string;
@@ -25,6 +33,9 @@ export class ProjectType {
 
   @Field(() => ID)
   ownerId!: string;
+
+  @Field(() => UserReferenceType)
+  owner!: UserReferenceType;
 
   @Field()
   createdAt!: Date;
