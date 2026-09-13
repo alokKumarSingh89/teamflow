@@ -1,4 +1,10 @@
-import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Directive,
+  Field,
+  ID,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 import { ProjectStatus } from '../generated/prisma/client';
 
@@ -7,6 +13,7 @@ registerEnumType(ProjectStatus, {
 });
 
 @ObjectType('Project')
+@Directive('@key(fields: "id")')
 export class ProjectType {
   @Field(() => ID)
   id!: string;

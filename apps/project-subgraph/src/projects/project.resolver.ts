@@ -1,4 +1,11 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  ResolveReference,
+} from '@nestjs/graphql';
 
 import { ProjectService } from './project.service';
 
@@ -55,5 +62,13 @@ export class ProjectResolver {
       description: input.description,
       status: input.status,
     });
+  }
+
+  @ResolveReference()
+  async resolveReference(reference: {
+    __typename: string;
+    id: string;
+  }): Promise<ProjectType> {
+    return this.projectService.getById(reference.id);
   }
 }

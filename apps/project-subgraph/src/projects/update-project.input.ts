@@ -10,10 +10,6 @@ import {
 
 import { ProjectStatus } from '../generated/prisma/client';
 
-registerEnumType(ProjectStatus, {
-  name: 'ProjectStatus',
-});
-
 @InputType()
 export class UpdateProjectInput {
   @Field({ nullable: true })
