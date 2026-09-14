@@ -9,6 +9,7 @@ import {
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { UserReferenceType } from './federation/user-reference.type';
+import { ProjectReferenceType } from './federation/project-reference.type';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { UserReferenceType } from './federation/user-reference.type';
       },
       sortSchema: true,
       buildSchemaOptions: {
-        orphanedTypes: [UserReferenceType],
+        orphanedTypes: [UserReferenceType, ProjectReferenceType],
       },
       graphiql: true,
 

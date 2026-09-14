@@ -49,13 +49,4 @@ export class TaskType {
 
   @Field()
   createdAt!: Date;
-
-  @Field()
-  updatedAt!: Date;
-  @Field(() => UserReferenceType, {
-    nullable: true,
-  })
-  assignee?: UserReferenceType | null;
-  @Field(() => UserReferenceType)
-  createdBy!: UserReferenceType;
 }
