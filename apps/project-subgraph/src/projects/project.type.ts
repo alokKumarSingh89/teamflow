@@ -34,9 +34,6 @@ export class ProjectType {
   @Field(() => ID)
   ownerId!: string;
 
-  @Field(() => UserReferenceType)
-  owner!: UserReferenceType;
-
   @Field()
   createdAt!: Date;
 

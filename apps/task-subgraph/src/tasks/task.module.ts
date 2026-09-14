@@ -10,6 +10,7 @@ import { CommentService } from './comment.service';
 import { TaskActivityService } from './task-activity.service';
 import { TaskResolver } from './task.resolver';
 import { TaskUserResolver } from './task-user.resolver';
+import { ProjectTasksResolver } from './project-tasks.resolver';
 
 @Module({
   imports: [DatabaseModule],
@@ -23,6 +24,7 @@ import { TaskUserResolver } from './task-user.resolver';
     TaskActivityService,
     TaskResolver,
     TaskUserResolver,
+    ProjectTasksResolver,
   ],
   exports: [TaskService, CommentService, TaskActivityService],
 })
