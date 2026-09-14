@@ -72,4 +72,61 @@ export class UserRepository {
       data,
     });
   }
+
+  async findPaginated(params: {
+    first: number;
+    after?: string;
+    search?: string;
+    email?: string;
+    status?: UserStatus;
+  }) {
+    const { first, after, search, email, status } = params;
+    return this.database.user.findMany({
+      where: {
+        ...(search
+          ? {
+              OR: [
+                {
+                  name: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+                {
+                  email: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              ],
+            }
+          : {}),
+        ...(email
+          ? {
+              email: {
+                equals: email,
+                mode: 'insensitive',
+              },
+            }
+          : {}),
+        ...(status
+          ? {
+              status,
+            }
+          : {}),
+      },
+      ...(after
+        ? {
+            cursor: {
+              id: after,
+            },
+            skip: 1,
+          }
+        : {}),
+      take: first + 1,
+      orderBy: {
+        id: 'asc',
+      },
+    });
+  }
 }
