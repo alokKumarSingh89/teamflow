@@ -62,6 +62,18 @@ export class UserService {
     });
   }
 
+  async listPaginated(params: {
+    first: number;
+    after?: string;
+    search?: string;
+    email?: string;
+    status?: UserStatus;
+  }) {
+    const users = await this.userRepository.findPaginated(params);
+
+    return users;
+  }
+
   private normalizeEmail(email: string): string {
     return email.trim().toLowerCase();
   }
