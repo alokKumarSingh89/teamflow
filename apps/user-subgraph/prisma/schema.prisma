@@ -45,6 +45,7 @@ model User {
     memberships Membership[]
 
     @@index([status])
+    @@index([createdAt, id])
     @@map("users")
 }
 

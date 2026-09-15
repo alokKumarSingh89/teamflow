@@ -11,6 +11,9 @@ import { CreateUserInput } from './user.input';
 import { UpdateUserInput } from './update-user.input';
 import { UserService } from './user.service';
 import { UserLoader } from './user.loader';
+import { UserPaginationArgs } from './pagination/user-pagination.args';
+import { UserFilterInput } from './user-filter.input';
+import { UserConnectionType } from './pagination/user-connection.type';
 
 @Resolver(() => UserType)
 export class UserResolver {
@@ -23,9 +26,10 @@ export class UserResolver {
   async user(@Args('id', { type: () => ID }) id: string): Promise<UserType> {
     return this.userService.getById(id);
   }
-  @Query(() => [UserType])
-  async users(): Promise<UserType[]> {
-    return this.userService.list();
+
+  @Query(() => UserConnectionType)
+  async users(@Args() args: UserPaginationArgs): Promise<UserConnectionType> {
+    return this.userService.listPaginated(args);
   }
 
   @Mutation(() => UserType)

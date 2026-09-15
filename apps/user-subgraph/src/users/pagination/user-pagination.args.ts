@@ -1,6 +1,17 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+
+import { Type } from 'class-transformer';
+
+import { UserFilterInput } from '../user-filter.input';
 
 @ArgsType()
 export class UserPaginationArgs {
@@ -14,10 +25,18 @@ export class UserPaginationArgs {
   @Max(100)
   first?: number;
 
-  @Field({
+  @Field(() => String, {
     nullable: true,
   })
   @IsOptional()
   @IsString()
   after?: string;
+
+  @Field(() => UserFilterInput, {
+    nullable: true,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UserFilterInput)
+  filter?: UserFilterInput;
 }
