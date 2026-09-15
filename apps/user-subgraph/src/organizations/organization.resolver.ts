@@ -12,12 +12,13 @@ import { OrganizationService } from './organization.service';
 import { CreateOrganizationInput } from './organization.input';
 import { TeamService } from '../teams/team.service';
 import { TeamType } from '../teams/team.type';
+import { TeamLoader } from '../teams/team.loader';
 
 @Resolver(() => OrganizationType)
 export class OrganizationResolver {
   constructor(
     private readonly organizationService: OrganizationService,
-    private readonly teamService: TeamService,
+    private readonly teamLoader: TeamLoader,
   ) {}
 
   @Query(() => OrganizationType)
@@ -45,6 +46,6 @@ export class OrganizationResolver {
   }
   @ResolveField(() => [TeamType])
   async teams(@Parent() organization: OrganizationType): Promise<TeamType[]> {
-    return this.teamService.listByOrganization(organization.id);
+    return this.teamLoader.byOrganizationId.load(organization.id);
   }
 }

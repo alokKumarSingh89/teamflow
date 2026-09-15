@@ -60,4 +60,22 @@ export class TeamRepository {
       data,
     });
   }
+
+  async findManyByOrganizationIds(organizationIds: readonly string[]) {
+    return this.database.team.findMany({
+      where: {
+        organizationId: {
+          in: [...organizationIds],
+        },
+      },
+      orderBy: [
+        {
+          organizationId: 'asc',
+        },
+        {
+          createdAt: 'asc',
+        },
+      ],
+    });
+  }
 }
