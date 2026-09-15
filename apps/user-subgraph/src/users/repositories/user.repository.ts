@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User, UserStatus } from '../../generated/prisma/client';
+import { Prisma, User, UserStatus } from '../../generated/prisma/client';
 import { DatabaseService } from '../../database/database.service';
 import { PrismaTransactionClient } from '../../database/prisma-transaction';
 
@@ -73,60 +73,79 @@ export class UserRepository {
     });
   }
 
-  async findPaginated(params: {
-    first: number;
-    after?: string;
-    search?: string;
-    email?: string;
-    status?: UserStatus;
-  }) {
-    const { first, after, search, email, status } = params;
-    return this.database.user.findMany({
-      where: {
-        ...(search
-          ? {
-              OR: [
-                {
-                  name: {
-                    contains: search,
-                    mode: 'insensitive',
+  async findPaginated(
+    take: number,
+    cursor?: {
+      createdAt: Date;
+      id: string;
+    },
+    status?: UserStatus,
+    search?: string,
+  ) {
+    const where: Prisma.UserWhereInput = {
+      AND: [
+        ...(cursor
+          ? [
+              {
+                OR: [
+                  {
+                    createdAt: {
+                      lt: cursor.createdAt,
+                    },
                   },
-                },
-                {
-                  email: {
-                    contains: search,
-                    mode: 'insensitive',
+                  {
+                    createdAt: cursor.createdAt,
+                    id: {
+                      lt: cursor.id,
+                    },
                   },
-                },
-              ],
-            }
-          : {}),
-        ...(email
-          ? {
-              email: {
-                equals: email,
-                mode: 'insensitive',
+                ],
               },
-            }
-          : {}),
+            ]
+          : []),
+
         ...(status
-          ? {
-              status,
-            }
-          : {}),
-      },
-      ...(after
-        ? {
-            cursor: {
-              id: after,
-            },
-            skip: 1,
-          }
-        : {}),
-      take: first + 1,
-      orderBy: {
-        id: 'asc',
-      },
+          ? [
+              {
+                status,
+              },
+            ]
+          : []),
+
+        ...(search
+          ? [
+              {
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                  {
+                    email: {
+                      contains: search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                ],
+              },
+            ]
+          : []),
+      ],
+    };
+
+    return this.database.user.findMany({
+      take: take + 1,
+      where,
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+        {
+          id: 'desc',
+        },
+      ],
     });
   }
   async findManyByIds(ids: readonly string[]) {
