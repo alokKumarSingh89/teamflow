@@ -20,6 +20,23 @@ export class DatabaseService
 
     super({
       adapter,
+      log: [
+        {
+          emit: 'event',
+          level: 'query',
+        },
+        {
+          emit: 'stdout',
+          level: 'error',
+        },
+      ],
+    });
+    (this as any).$on('query', (event: any) => {
+      console.log('\n========== USER DB ==========');
+      console.log(`Duration: ${event.duration}ms`);
+      console.log(`SQL:      ${event.query}`);
+      console.log(`Params:   ${event.params}`);
+      console.log('=============================\n');
     });
   }
 
