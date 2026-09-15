@@ -129,4 +129,13 @@ export class UserRepository {
       },
     });
   }
+  async findManyByIds(ids: readonly string[]) {
+    return this.database.user.findMany({
+      where: {
+        id: {
+          in: [...ids],
+        },
+      },
+    });
+  }
 }

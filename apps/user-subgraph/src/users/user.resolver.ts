@@ -10,10 +10,14 @@ import { UserType } from './user.type';
 import { CreateUserInput } from './user.input';
 import { UpdateUserInput } from './update-user.input';
 import { UserService } from './user.service';
+import { UserLoader } from './user.loader';
 
 @Resolver(() => UserType)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userLoader: UserLoader,
+  ) {}
 
   @Query(() => UserType)
   async user(@Args('id', { type: () => ID }) id: string): Promise<UserType> {
@@ -54,6 +58,12 @@ export class UserResolver {
     __typename: string;
     id: string;
   }): Promise<UserType> {
-    return this.userService.getById(reference.id);
+    const user = await this.userLoader.byId.load(reference.id);
+
+    if (!user) {
+      throw new Error(`User ${reference.id} not found`);
+    }
+
+    return user;
   }
 }
