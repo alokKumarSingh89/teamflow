@@ -11,6 +11,8 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { join } from 'path';
+import { RedisModule } from './redis/redis.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { join } from 'path';
     OrganizationModule,
     MembershipModule,
     TeamModule,
+    RedisModule,
+    AuthModule,
   ],
   providers: [],
 })
