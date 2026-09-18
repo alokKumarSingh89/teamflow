@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RedisService } from '../redis/redis.service';
-import { SESSION_TTL_SECONDS, UserSession } from './session.type';
+import { SESSION_TTL_SECONDS, UserSession } from './types/session.type';
 import { randomUUID } from 'node:crypto';
 
 @Injectable()
@@ -48,5 +48,17 @@ export class SessionService {
   async isActive(sessionId: string): Promise<boolean> {
     const session = await this.findById(sessionId);
     return session?.status === 'ACTIVE';
+  }
+  async revokeForUser(sessionId: string, userId: string): Promise<void> {
+    const session = await this.findById(sessionId);
+    if (!session) {
+      return;
+    }
+
+    if (session.userId !== userId) {
+      throw new UnauthorizedException('Invalid authentication session');
+    }
+
+    await this.revoke(sessionId);
   }
 }

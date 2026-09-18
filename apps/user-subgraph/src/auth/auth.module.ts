@@ -7,6 +7,8 @@ import { AuthResolver } from './auth.resolver';
 import { RedisModule } from '../redis/redis.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import type { StringValue } from 'ms';
+import { CurrentUserResolver } from './current-user.resolver';
+import { InternalAuthGuard } from './internal-auth.guard';
 
 @Module({
   imports: [
@@ -25,7 +27,14 @@ import type { StringValue } from 'ms';
       }),
     }),
   ],
-  providers: [AuthResolver, AuthService, PasswordService, SessionService],
+  providers: [
+    AuthResolver,
+    AuthService,
+    PasswordService,
+    SessionService,
+    CurrentUserResolver,
+    InternalAuthGuard,
+  ],
   exports: [AuthService, PasswordService, SessionService, JwtModule],
 })
 export class AuthModule {}

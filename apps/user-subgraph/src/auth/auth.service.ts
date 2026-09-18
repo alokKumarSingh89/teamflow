@@ -8,8 +8,9 @@ import { PasswordService } from './password-hasher.service';
 import { SessionService } from './session.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterInput } from './register.input';
-import { AuthPayloadType } from './auth-payload.type';
+import { AuthPayloadType } from './types/auth-payload.type';
 import { LoginInput } from './login.input';
+import { LogoutPayloadType } from './types/logout-payload.type';
 
 interface AccessTokenPayload {
   sub: string;
@@ -110,6 +111,14 @@ export class AuthService {
         email: user.email,
         name: user.name,
       },
+    };
+  }
+
+  async logout(userId: string, sessionId: string): Promise<LogoutPayloadType> {
+    await this.sessionService.revokeForUser(sessionId, userId);
+
+    return {
+      success: true,
     };
   }
 

@@ -20,7 +20,6 @@ export class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     if (!user) {
       return;
     }
-
     request.http.headers.set('x-user-id', user.id);
 
     request.http.headers.set('x-session-id', user.sessionId);

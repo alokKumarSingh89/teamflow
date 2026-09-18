@@ -1,10 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from './types/jwt-payload.type';
-import { AuthenticatedUser } from './types/authenticated-user.type';
+
 import { RedisService } from '../redis/redis.service';
+import { AuthenticatedUser } from './types/authenticated-user.type';
+
+interface JwtPayload {
+  sub: string;
+  sid: string;
+  iat?: number;
+  exp?: number;
+}
 
 interface UserSession {
   sessionId: string;
@@ -16,21 +22,20 @@ interface UserSession {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly redisService: RedisService,
-    private readonly config: ConfigService,
-  ) {
-    const secret = config.get('JWT_ACCESS_SECRET');
+  constructor(private readonly redisService: RedisService) {
+    const secret = process.env.JWT_ACCESS_SECRET;
 
     if (!secret) {
       throw new Error('JWT_ACCESS_SECRET is not configured');
     }
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: secret,
     });
   }
+
   async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
     if (!payload.sub || !payload.sid) {
       throw new UnauthorizedException('Invalid authentication token');
@@ -51,6 +56,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     } catch {
       throw new UnauthorizedException('Invalid session');
     }
+
     if (session.status !== 'ACTIVE') {
       throw new UnauthorizedException('Session is no longer active');
     }

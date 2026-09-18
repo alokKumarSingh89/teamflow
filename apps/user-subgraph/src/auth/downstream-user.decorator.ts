@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { DownstreamUser } from './downstream-user.guard';
+import { DownstreamUser } from './internal-auth.guard';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 export const DownstreamUserD = createParamDecorator(
